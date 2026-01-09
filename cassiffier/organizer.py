@@ -135,8 +135,8 @@ class Organizer:
         category = classification['category']
         confidence = classification['confidence']
         
-        # Build review path with category subfolder
-        review_subdir = review_dir / f"{category}_conf{confidence:.2f}"
+        # Round confidence to 1 decimal place to avoid too many folders
+        review_subdir = review_dir / f"{category}_conf{confidence:.1f}"
         review_subdir.mkdir(parents=True, exist_ok=True)
         
         # Copy file to review

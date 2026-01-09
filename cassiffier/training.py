@@ -125,9 +125,18 @@ class ModelTrainer:
         Returns:
             Trained model.
         """
+        # Check for classes with too few samples for stratification
+        unique, counts = np.unique(y, return_counts=True)
+        min_samples = counts.min()
+        
+        # Only use stratification if all classes have at least 2 samples
+        stratify_arg = y if min_samples >= 2 else None
+        if stratify_arg is None:
+            logging.warning("Some classes have only 1 sample. Disabling stratification.")
+        
         # Split data
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=test_size, random_state=random_state, stratify=y
+            X, y, test_size=test_size, random_state=random_state, stratify=stratify_arg
         )
         
         logging.info(f"Training set: {len(X_train)} samples")

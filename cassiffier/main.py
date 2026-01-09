@@ -95,9 +95,9 @@ def process_files(files, database, detector, feature_extractor, classifier,
         print(f"\n[{i}/{total}] Processing: {file_path.name}")
         
         try:
-            # Check for duplicates
+            # Check for duplicates (compute hash once)
             file_hash = detector.get_hash(file_path)
-            is_dup, existing = detector.check_duplicate(file_path)
+            is_dup, existing, _ = detector.check_duplicate(file_path, file_hash)
             
             if is_dup:
                 action = handle_duplicate(file_path, existing, config)
@@ -107,8 +107,11 @@ def process_files(files, database, detector, feature_extractor, classifier,
                     skipped += 1
                     continue
                 elif action == 'delete':
-                    file_path.unlink()
-                    print("  → Deleted (duplicate)")
+                    try:
+                        file_path.unlink()
+                        print("  → Deleted (duplicate)")
+                    except (PermissionError, FileNotFoundError) as e:
+                        print(f"  → Failed to delete: {e}")
                     skipped += 1
                     continue
                 # If 'keep_both', continue processing

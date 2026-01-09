@@ -138,6 +138,17 @@ class Database:
         if not kwargs:
             return
         
+        # Whitelist of allowed column names to prevent SQL injection
+        allowed_columns = {
+            'file_hash', 'original_path', 'organized_path', 'category',
+            'subcategory', 'genre', 'confidence', 'features', 'timestamp', 'status'
+        }
+        
+        # Validate all keys are allowed columns
+        for key in kwargs.keys():
+            if key not in allowed_columns:
+                raise ValueError(f"Invalid column name: {key}")
+        
         # Handle features separately if provided
         if 'features' in kwargs and isinstance(kwargs['features'], dict):
             kwargs['features'] = json.dumps(kwargs['features'])

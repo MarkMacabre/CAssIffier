@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Training script for CAssIffier ML classifier."""
 
 import sys

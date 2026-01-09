@@ -38,22 +38,24 @@ class DuplicateDetector:
         """
         self.database = database
     
-    def check_duplicate(self, file_path):
+    def check_duplicate(self, file_path, file_hash=None):
         """Check if a file is a duplicate.
         
         Args:
             file_path: Path to file to check.
+            file_hash: Pre-computed file hash (optional).
             
         Returns:
-            Tuple of (is_duplicate, existing_record) where existing_record
+            Tuple of (is_duplicate, existing_record, file_hash) where existing_record
             is the database record of the duplicate file, or None.
         """
-        file_hash = compute_hash(file_path)
+        if file_hash is None:
+            file_hash = compute_hash(file_path)
         existing = self.database.get_file_by_hash(file_hash)
         
         if existing:
-            return True, existing
-        return False, None
+            return True, existing, file_hash
+        return False, None, file_hash
     
     def get_hash(self, file_path):
         """Get hash for a file.

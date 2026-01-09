@@ -132,12 +132,10 @@ class ContextExtractor:
         
         for token in all_tokens:
             # Look for patterns like "140bpm" or "bpm140"
-            match = re.search(r'(\d{2,3})bpm', token)
+            match = re.search(r'(?:(\d{2,3})bpm|bpm(\d{2,3}))', token)
             if match:
-                return int(match.group(1))
-            
-            match = re.search(r'bpm(\d{2,3})', token)
-            if match:
-                return int(match.group(1))
+                # Check both groups since one will be None
+                bpm = match.group(1) or match.group(2)
+                return int(bpm)
         
         return None
