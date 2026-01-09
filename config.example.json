@@ -1,0 +1,13 @@
+{
+  "confidence_threshold": 0.7,
+  "max_duration": 30.0,
+  "min_duration": 0.01,
+  "use_ml_classifier": true,
+  "ml_model_path": "models/classifier.joblib",
+  "database_path": "cassiffier.db",
+  "review_folder_name": "⚠_Review",
+  "scan_extensions": [".wav", ".mp3"],
+  "enable_genre_detection": true,
+  "genre_confidence_threshold": 0.6,
+  "duplicate_action": "ask"
+}
